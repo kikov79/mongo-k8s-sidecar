@@ -43,9 +43,9 @@ spec:
               value: "role=mongo,environment=test"
       volumes:
         - name: mongo-persistent-storage
-          gcePersistentDisk:
-            pdName: mongo-persistent-storage-node-<num>-disk
-            fsType: ext4
+          nfs:
+            path: /kcfs/mongo-<num>
+            server: kc-fs
     metadata:
       labels:
         name: mongo-node-<num>
