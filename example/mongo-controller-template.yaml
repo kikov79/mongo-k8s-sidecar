@@ -13,13 +13,13 @@
 kind: ReplicationController
 apiVersion: v1
 metadata:
-  name: mongo-<num>
+  name: <env>-mongo-<num>
 spec:
   replicas: 1
   selector:
-    name: mongo-node-<num>
+    name: <env>-mongo-node-<num>
     role: mongo
-    environment: test
+    environment: <env>
   template:
     spec:
       containers:
@@ -34,20 +34,21 @@ spec:
           ports:
             - containerPort: 27017
           volumeMounts:
-            - name: mongo-persistent-storage
-              mountPath: /data/db
+            - name: azure
+              mountPath: /mnt/azure
         - name: mongo-sidecar
           image: leportlabs/mongo-k8s-sidecar
           env:
             - name: MONGO_SIDECAR_POD_LABELS
-              value: "role=mongo,environment=test"
+              value: "role=mongo,environment=<env>"
       volumes:
-        - name: mongo-persistent-storage
-          nfs:
-            path: /kcfs/mongo-<num>
-            server: kc-fs
+        - name: azure
+          azureFile:
+            secretName: azure-secret
+            shareName: <env>-mongo-<num>
+            readOnly: false
     metadata:
       labels:
-        name: mongo-node-<num>
+        name: <env>-mongo-node-<num>
         role: mongo
-        environment: test
+        environment: <env>

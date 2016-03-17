@@ -14,11 +14,11 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: mongo-<num>
-  name: mongo-<num>
+    name: <env>-mongo-<num>
+  name: <env>-mongo-<num>
 spec:
   ports:
     - port: 27017
       targetPort: 27017
   selector:
-    name: mongo-node-<num>
+    name: <env>-mongo-node-<num>
